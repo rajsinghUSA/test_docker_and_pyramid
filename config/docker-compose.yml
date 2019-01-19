@@ -1,0 +1,43 @@
+version: '3'
+services:
+  db:
+    container_name: postgres
+    image: "postgres:11.1"
+    env_file:
+      - env_file
+    networks:
+      - db_nw
+
+  pyramid_app:
+    build: .
+    stdin_open: true
+    tty: true
+    image: image_from_dockerfile
+    env_file:
+      - /config/env_file
+    volumes:
+    - .:/opt/services/pyramid_app/src
+#    - ./logs:/var/log
+#    - ./config:/etc/appconfig
+    image: image_from_dockerfile
+    working_dir: /opt/services/pyramid_app/src
+    command: pserve development.ini --reload
+    networks:
+    - db_nw
+    - web_nw
+    depends_on:
+      - db
+  nginx:
+    image: nginx:1.13.5
+    ports:
+    - "6543:6543"
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    networks:
+    - web_nw
+
+networks:
+  db_nw:
+    driver: bridge
+  web_nw:
+    driver: bridge
