@@ -16,12 +16,12 @@ services:
     env_file:
       - services_config/env_file
     volumes:
-    - volumes/src:/app
+    - ./volumes/src:/app
 #    - ./logs:/var/log
 #    - ./config:/etc/appconfig
     image: image_from_dockerfile
     working_dir: /app
-    command: pserve development.ini --reload
+    #command: bin/pserve testsite_config/development.ini --reload
     networks:
     - db_nw
     - web_nw
@@ -32,7 +32,7 @@ services:
     ports:
     - "6543:6543"
     volumes:
-      - volumes/conf.d:/etc/nginx/conf.d
+      - ./volumes/conf.d:/etc/nginx/conf.d
     networks:
     - web_nw
 

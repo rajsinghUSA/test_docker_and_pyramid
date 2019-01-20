@@ -3,13 +3,13 @@ import os
 from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.txt')).read()
-CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
+#README = open(os.path.join(here, 'README.txt')).read()
+#CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires=['pyramid>=1.4',
           'pyramid_jinja2',
           'jinja2',
-          'jinja2_alchemy_starter'
+          'jinja2_alchemy_starter',
           'sqlalchemy',
           'waitress',
           'pyramid_tm',
@@ -17,10 +17,10 @@ requires=['pyramid>=1.4',
           'pyramid_mailer',
           'zope.sqlalchemy']
 
-setup(name='invite',
+setup(name='testsite',
       version='0.0',
-      description='invite',
-      long_description=README + '\n\n' +  CHANGES,
+      description='testsite',
+#      long_description=README + '\n\n' +  CHANGES,
       classifiers=[
         "Programming Language :: Python",
         "Framework :: Pylons",
@@ -36,10 +36,10 @@ setup(name='invite',
       zip_safe=False,
       install_requires=requires,
       tests_require=requires,
-      test_suite="invite",
+      test_suite="testsite",
       entry_points = """\
       [paste.app_factory]
-      main = invite:main
+      main = testsite:main
       """,
       paster_plugins=['pyramid'],
       )
