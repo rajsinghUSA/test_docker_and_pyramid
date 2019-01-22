@@ -4,7 +4,7 @@ services:
     container_name: postgres
     image: "postgres:11.1"
     env_file:
-      - services_config/env_file
+      - services_config/postgres_config/env_file
     networks:
       - db_nw
 
@@ -14,14 +14,22 @@ services:
 #    tty: true
     image: image_from_dockerfile
     env_file:
-      - services_config/env_file
+      - services_config/postgres_config/env_file
     volumes:
-    - ./volumes/src:/app
+    - ./volumes/testsite:/app/testsite
 #    - ./logs:/var/log
 #    - ./config:/etc/appconfig
     image: image_from_dockerfile
     working_dir: /app
-    #command: bin/pserve testsite_config/development.ini --reload
+    expose:
+      - 8000
+    command: /app/venv/bin/pserve /app/testsite_config/development.ini --reload
+    # command: >
+    #   sh -c "virtualenv /app/venv &&
+    #          /app/venv/bin/pip install -r /app/testsite_config/requirements.pip &&
+    #          /app/venv/bin/pip install -e '.[testing]' &&
+    #          /app/venv/bin/pserve /app/testsite_config/development.ini --reload"
+    # /app/venv/bin/pserve /app/testsite_config/development.ini --reload
     networks:
     - db_nw
     - web_nw
@@ -30,11 +38,13 @@ services:
   nginx:
     image: nginx:1.13.5
     ports:
-    - "6543:6543"
+    - "8000:80"
     volumes:
       - ./volumes/conf.d:/etc/nginx/conf.d
     networks:
     - web_nw
+    depends_on:
+      - pyramid_app
 
 networks:
   db_nw:

@@ -15,6 +15,7 @@ requires=['pyramid>=1.4',
           'pyramid_tm',
           'pyramid_debugtoolbar',
           'pyramid_mailer',
+          'pyramid_redis_sessions',
           'zope.sqlalchemy']
 
 setup(name='testsite',
